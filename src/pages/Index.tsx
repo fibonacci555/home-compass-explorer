@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { Search } from 'lucide-react';
@@ -9,6 +8,7 @@ import { WorldMap } from '../components/ui/world-map';
 import PropertyCard from '../components/PropertyCard';
 import { calculateMortgage, formatCurrency } from '../utils/mortgageCalculator';
 import { useTheme } from '../components/ThemeContext';
+import InteractiveSearch from '../components/InteractiveSearch';
 
 // Map connection data
 const mapDots = [
@@ -112,7 +112,6 @@ export default function Index() {
   const [downPayment, setDownPayment] = useState(100000);
   const [interestRate, setInterestRate] = useState(4.5);
   const [loanTerm, setLoanTerm] = useState(30);
-  const [searchQuery, setSearchQuery] = useState('');
 
   // Calculate mortgage details
   const monthlyPayment = calculateMortgage(propertyPrice, downPayment, interestRate, loanTerm);
@@ -227,144 +226,75 @@ export default function Index() {
             animate={heroInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            Explore curated global listings and calculate your mortgage instantly with our interactive tools.
+            Explore curated global listings and find your ideal property with our premium search experience.
           </motion.p>
           <motion.div
-            className="relative w-full max-w-2xl mx-auto group"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={heroInView ? { opacity: 1, scale: 1 } : {}}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            {/* Premium Search Bar */}
-            <div className="flex items-center backdrop-blur-md bg-white/80 dark:bg-gray-900/80 border border-gray-200 dark:border-gray-700 rounded-full px-6 py-4 shadow-xl transition-all duration-300 group-hover:shadow-2xl group-hover:border-blue-300 dark:group-hover:border-blue-700">
-              <motion.div
-                animate={{ rotate: [0, 10, -10, 0] }}
-                transition={{ duration: 0.3, repeat: Infinity, repeatType: "loop", repeatDelay: 2 }}
-              >
-                <Search className="h-5 w-5 text-blue-600 dark:text-blue-400 mr-3" />
-              </motion.div>
-              <input
-                type="text"
-                placeholder="Search city, address, or property type..."
-                className="flex-1 bg-transparent placeholder-gray-500 dark:placeholder-gray-400 text-gray-800 dark:text-gray-200 focus:outline-none font-medium transition-all duration-300"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              <button
-                onClick={() => alert(`Searching for "${searchQuery || 'properties'}"`)}
-                className="px-6 py-2 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-md hover:shadow-lg flex items-center"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 mr-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
-                  />
-                </svg>
-                Search with AI
-              </button>
-            </div>
-            
-            {/* Subtle Glowing Border Effect */}
-            <motion.div
-              className="absolute inset-0 rounded-full border-2 border-transparent z-0"
-              animate={{
-                borderColor: ["rgba(59, 130, 246, 0)", "rgba(59, 130, 246, 0.2)", "rgba(59, 130, 246, 0)"],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                repeatType: "loop",
-                ease: "easeInOut",
-              }}
-            />
+            {/* Replace the old search bar with the new interactive search component */}
+            <InteractiveSearch />
           </motion.div>
           
-          {/* Quick Search Categories */}
-          <motion.div 
-            className="mt-10 flex flex-wrap justify-center gap-3"
-            initial={{ opacity: 0, y: 10 }}
-            animate={heroInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.4 }}
+          {/* Sparkle Effect */}
+          <motion.div
+            className="absolute inset-0 pointer-events-none z-0"
+            initial={{ opacity: 0 }}
+            animate={heroInView ? { opacity: 1 } : {}}
+            transition={{ duration: 1, delay: 0.5 }}
           >
-            {['Luxury', 'Family', 'Beachfront', 'Mountain', 'Urban', 'Investment'].map((cat, index) => (
-              <motion.button
-                key={cat}
-                className="px-4 py-2 rounded-full bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-medium hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:border-blue-300 dark:hover:border-blue-700 transition-all duration-300"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ duration: 0.2 }}
-              >
-                {cat}
-              </motion.button>
+            {[...Array(12)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute w-1.5 h-1.5 bg-blue-400 dark:bg-blue-300 rounded-full"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                }}
+                animate={{
+                  scale: [0, 1, 0],
+                  opacity: [0, 0.8, 0],
+                }}
+                transition={{
+                  duration: 2 + Math.random() * 2,
+                  repeat: Infinity,
+                  repeatType: "loop",
+                  delay: Math.random() * 3,
+                }}
+              />
             ))}
           </motion.div>
-        </div>
-
-        {/* Sparkle Effect */}
-        <motion.div
-          className="absolute inset-0 pointer-events-none z-0"
-          initial={{ opacity: 0 }}
-          animate={heroInView ? { opacity: 1 } : {}}
-          transition={{ duration: 1, delay: 0.5 }}
-        >
-          {[...Array(12)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-1.5 h-1.5 bg-blue-400 dark:bg-blue-300 rounded-full"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-              }}
-              animate={{
-                scale: [0, 1, 0],
-                opacity: [0, 0.8, 0],
-              }}
-              transition={{
-                duration: 2 + Math.random() * 2,
-                repeat: Infinity,
-                repeatType: "loop",
-                delay: Math.random() * 3,
-              }}
-            />
-          ))}
-        </motion.div>
-        
-        {/* Scroll Indicator */}
-        <motion.div 
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-          animate={{ 
-            y: [0, 10, 0],
-            opacity: [0.5, 1, 0.5],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            repeatType: "loop",
-          }}
-        >
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            className="h-8 w-8 text-blue-600 dark:text-blue-400" 
-            fill="none" 
-            viewBox="0 0 24 24" 
-            stroke="currentColor"
+          
+          {/* Scroll Indicator */}
+          <motion.div 
+            className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+            animate={{ 
+              y: [0, 10, 0],
+              opacity: [0.5, 1, 0.5],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              repeatType: "loop",
+            }}
           >
-            <path 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              strokeWidth={2} 
-              d="M19 14l-7 7m0 0l-7-7m7 7V3" 
-            />
-          </svg>
-        </motion.div>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              className="h-8 w-8 text-blue-600 dark:text-blue-400" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor"
+            >
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                strokeWidth={2} 
+                d="M19 14l-7 7m0 0l-7-7m7 7V3" 
+              />
+            </svg>
+          </motion.div>
+        </div>
       </motion.section>
 
       {/* ================= PROPERTIES CAROUSEL ================= */}
@@ -585,9 +515,10 @@ export default function Index() {
                       </div>
                     </div>
                     
+                    {/* Remove amortization button and replace with a premium action button */}
                     <motion.button
                       className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 px-6 rounded-xl font-semibold shadow-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 flex items-center justify-center"
-                      onClick={() => alert('Show Amortization Schedule')}
+                      onClick={() => alert('Request personalized mortgage consultation')}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                     >
@@ -602,10 +533,10 @@ export default function Index() {
                           strokeLinecap="round" 
                           strokeLinejoin="round" 
                           strokeWidth={2} 
-                          d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" 
+                          d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                         />
                       </svg>
-                      See Amortization Schedule
+                      Get Pre-Approved Today
                     </motion.button>
                   </div>
                 </motion.div>
