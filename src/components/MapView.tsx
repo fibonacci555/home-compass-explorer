@@ -1,21 +1,49 @@
-import { useState, useMemo } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+
+import { useState, useMemo, useEffect } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { X } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Property } from '@/types/property';
 
 // Fix Leaflet default icon paths
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import iconRetina from 'leaflet/dist/images/marker-icon-2x.png';
+
+let DefaultIcon = L.icon({
+  iconUrl: icon,
+  shadowUrl: iconShadow,
+  iconRetinaUrl: iconRetina,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
 });
 
-const MapView = ({ properties }) => {
-  const [selectedProperty, setSelectedProperty] = useState(null);
+L.Marker.prototype.options.icon = DefaultIcon;
+
+// Helper component to force map to resize after render
+const MapResizer = () => {
+  const map = useMap();
+  
+  useEffect(() => {
+    setTimeout(() => {
+      map.invalidateSize();
+    }, 100);
+  }, [map]);
+  
+  return null;
+};
+
+interface MapViewProps {
+  properties: Property[];
+}
+
+const MapView = ({ properties }: MapViewProps) => {
+  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
 
   // Memoize markers to prevent unnecessary re-renders
   const markers = useMemo(
@@ -47,7 +75,7 @@ const MapView = ({ properties }) => {
   );
 
   return (
-    <div className="relative h-full w-full">
+    <div className="relative w-full h-full">
       {/* Sidebar */}
       <div
         className={`
@@ -57,7 +85,6 @@ const MapView = ({ properties }) => {
           z-50
           ${selectedProperty ? 'translate-x-0' : 'translate-x-full'}
         `}
-        role="dialog"
         aria-labelledby="property-details-title"
       >
         <div className="p-4 overflow-y-auto h-full">
@@ -104,21 +131,25 @@ const MapView = ({ properties }) => {
         </div>
       </div>
 
-      {/* Map */}
-      <MapContainer
-        center={[38.7223, -9.1393]}
-        zoom={12}
-        scrollWheelZoom={true}
-        className="h-full w-full z-0"
-        role="region"
-        aria-label="Interactive map of properties"
-      >
-        <TileLayer
-          attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        <MarkerClusterGroup>{markers}</MarkerClusterGroup>
-      </MapContainer>
+      {/* Map Container */}
+      <div className="w-full h-full" style={{ minHeight: "500px" }}>
+        <MapContainer
+          center={[38.7223, -9.1393]}
+          zoom={12}
+          scrollWheelZoom={true}
+          className="h-full w-full"
+          style={{ height: "100%", width: "100%" }}
+        >
+          <TileLayer
+            attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          <MarkerClusterGroup>
+            {markers}
+          </MarkerClusterGroup>
+          <MapResizer />
+        </MapContainer>
+      </div>
     </div>
   );
 };
