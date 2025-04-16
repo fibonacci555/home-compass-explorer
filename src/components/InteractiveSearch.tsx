@@ -1,13 +1,11 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
-import { Home, Building, Heart } from 'lucide-react';
+import { Home, Building, Heart, MapPin } from 'lucide-react';
 import { SearchResult, PropertyType } from '@/types/search';
 import { mockResults, locations } from '@/data/mockData';
 import SearchBar from './search/SearchBar';
 import QuestionCard from './search/QuestionCard';
-import LocationQuestion from './search/LocationQuestion';
 import SimpleLocationDropdown from './search/SimpleLocationDropdown';
 import BudgetQuestion from './search/BudgetQuestion';
 import PropertyTypeQuestion from './search/PropertyTypeQuestion';
@@ -24,7 +22,7 @@ export default function InteractiveSearch() {
   const [budget, setBudget] = useState<number>(1000000);
   const [propertyType, setPropertyType] = useState<string>('');
   const [bedrooms, setBedrooms] = useState<number>(3);
-  const [selectedResult, setSelectedResult] = useState<SearchResult | null>(null);
+  const [selectedResult, setSelectedResult] = useState<any | null>(null);
   const [showResults, setShowResults] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   

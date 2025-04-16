@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { aiSearch } from '@/services/aiSearchService';
@@ -6,7 +7,7 @@ import SearchBar from '@/components/search/SearchBar';
 import PropertyCard from '@/components/PropertyCard';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SearchResult } from '@/types/search';
-import { Search as SearchIcon } from 'lucide-react';
+import { Search } from 'lucide-react';
 
 const SearchResultsPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -77,7 +78,7 @@ const SearchResultsPage = () => {
                   </div>
                 ) : (
                   <div className="text-center py-10">
-                    <SearchIcon className="h-6 w-6 mx-auto text-gray-400 mb-2" />
+                    <Search className="h-6 w-6 mx-auto text-gray-400 mb-2" />
                     <p className="text-gray-500">No exact matches found.</p>
                   </div>
                 )}
@@ -91,7 +92,7 @@ const SearchResultsPage = () => {
                   </div>
                 ) : (
                   <div className="text-center py-10">
-                    <SearchIcon className="h-6 w-6 mx-auto text-gray-400 mb-2" />
+                    <Search className="h-6 w-6 mx-auto text-gray-400 mb-2" />
                     <p className="text-gray-500">No recommended matches found.</p>
                   </div>
                 )}
@@ -102,7 +103,7 @@ const SearchResultsPage = () => {
 
         {!isSearching && searchResults === null && (
           <div className="text-center mt-12">
-            <SearchIcon className="h-10 w-10 mx-auto text-gray-400 mb-4" />
+            <Search className="h-10 w-10 mx-auto text-gray-400 mb-4" />
             <p className="text-gray-600">Enter a search query to find properties.</p>
           </div>
         )}

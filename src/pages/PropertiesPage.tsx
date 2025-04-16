@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { properties } from '@/data/properties';
-import { Home } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import PropertyFilters from '@/components/properties/PropertyFilters';
 import PropertySorting from '@/components/properties/PropertySorting';
@@ -25,6 +24,11 @@ const PropertiesPage = () => {
     resetFilters
   } = usePropertyFilters(properties);
 
+  // Convert setFeatures to accept a complete object (Record<string, boolean>)
+  const handleFeaturesChange = (newFeatures: Record<string, boolean>) => {
+    setFeatures(newFeatures);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Navbar />
@@ -45,7 +49,7 @@ const PropertiesPage = () => {
               minBathrooms={minBathrooms}
               setMinBathrooms={setMinBathrooms}
               features={features}
-              setFeatures={setFeatures}
+              setFeatures={handleFeaturesChange}
               resetFilters={resetFilters}
             />
           </div>

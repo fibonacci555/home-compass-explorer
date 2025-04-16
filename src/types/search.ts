@@ -1,13 +1,10 @@
 
 import { ReactNode } from 'react';
+import { Property } from '@/types/property';
 
 export interface SearchResult {
-  id: number;
-  title: string;
-  location: string;
-  price: string;
-  image: string;
-  match: number;
+  exactMatches: Property[];
+  recommendedMatches: Property[];
 }
 
 export interface PropertyType {
