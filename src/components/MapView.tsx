@@ -47,10 +47,9 @@ function getIconForProperty(price: string) {
 }
 
 // Create a separate PropertyMarker component to improve structure
-function PropertyMarker({ property, onSelect }: { property: any, onSelect: (property: any) => void }) {
+const PropertyMarker = ({ property, onSelect }: { property: any, onSelect: (property: any) => void }) => {
   return (
     <Marker
-      key={property.id}
       position={[property.latitude, property.longitude]}
       icon={getIconForProperty(property.price)}
       eventHandlers={{
@@ -161,7 +160,6 @@ function MapView() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         
-        {/* Use property markers as direct children of MapContainer */}
         {properties.map((property) => (
           <PropertyMarker 
             key={property.id}
