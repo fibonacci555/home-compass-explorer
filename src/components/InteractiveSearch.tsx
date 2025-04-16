@@ -114,7 +114,7 @@ export default function InteractiveSearch() {
     },
     {
       id: 'budget',
-      question: 'What's your investment budget?',
+      question: "What's your investment budget?",
       component: (
         <div className="space-y-4">
           <div className="flex justify-between items-center">
