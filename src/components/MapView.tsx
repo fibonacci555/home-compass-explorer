@@ -46,6 +46,27 @@ function getIconForProperty(price: string) {
   return houseIcon;
 }
 
+// Create a separate PropertyMarker component to improve structure
+function PropertyMarker({ property, onSelect }: { property: any, onSelect: (property: any) => void }) {
+  return (
+    <Marker
+      key={property.id}
+      position={[property.latitude, property.longitude]}
+      icon={getIconForProperty(property.price)}
+      eventHandlers={{
+        click: () => onSelect(property),
+      }}
+    >
+      <Popup>
+        <div className="p-1">
+          <p className="font-semibold">{property.title}</p>
+          <p className="text-sm text-gray-600">{property.price}</p>
+        </div>
+      </Popup>
+    </Marker>
+  );
+}
+
 function MapView() {
   const [selectedProperty, setSelectedProperty] = useState<any>(null);
 
@@ -135,28 +156,18 @@ function MapView() {
         scrollWheelZoom={true}
         className="h-full w-full z-0"
       >
-        {/* This is the fix - we need to make sure the children are properly provided to the context consumer */}
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-
+        
+        {/* Use property markers as direct children of MapContainer */}
         {properties.map((property) => (
-          <Marker
+          <PropertyMarker 
             key={property.id}
-            position={[property.latitude, property.longitude]}
-            icon={getIconForProperty(property.price)}
-            eventHandlers={{
-              click: () => setSelectedProperty(property),
-            }}
-          >
-            <Popup>
-              <div className="p-1">
-                <p className="font-semibold">{property.title}</p>
-                <p className="text-sm text-gray-600">{property.price}</p>
-              </div>
-            </Popup>
-          </Marker>
+            property={property} 
+            onSelect={setSelectedProperty} 
+          />
         ))}
       </MapContainer>
       
