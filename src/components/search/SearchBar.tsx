@@ -1,8 +1,7 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { SearchResult } from '@/types/search';
 
 interface SearchBarProps {
   searchQuery: string;
