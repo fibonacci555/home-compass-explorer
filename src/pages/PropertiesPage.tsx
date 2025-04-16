@@ -45,36 +45,65 @@ const PropertiesPage = () => {
     const applyFilters = () => {
       let result = [...properties];
       
-      // Filter by price range
-      result = result.filter(property => {
+      // Keep track of how many filters each property passes
+      const propertyScores = properties.map(property => {
+        let score = 0;
+        let totalFilters = 0;
+        
+        // Filter by price range
         const price = parseInt(property.price.replace(/[^0-9]/g, ''));
-        return price >= priceRange[0] && price <= priceRange[1];
+        if (price >= priceRange[0] && price <= priceRange[1]) {
+          score++;
+        }
+        totalFilters++;
+        
+        // Filter by bedrooms
+        if (minBedrooms) {
+          totalFilters++;
+          if (property.bedrooms >= parseInt(minBedrooms)) {
+            score++;
+          }
+        }
+        
+        // Filter by bathrooms
+        if (minBathrooms) {
+          totalFilters++;
+          if (property.bathrooms >= parseInt(minBathrooms)) {
+            score++;
+          }
+        }
+        
+        // Filter by features
+        const activeFeatures = Object.entries(features)
+          .filter(([_, active]) => active)
+          .map(([name]) => name);
+        
+        if (activeFeatures.length > 0) {
+          totalFilters += activeFeatures.length;
+          // Count how many selected features the property has
+          activeFeatures.forEach(feature => {
+            if (property.features && property.features.includes(feature)) {
+              score++;
+            }
+          });
+        }
+        
+        // Calculate match percentage
+        const matchPercentage = totalFilters > 0 ? Math.round((score / totalFilters) * 100) : 100;
+        
+        return {
+          ...property,
+          match: matchPercentage,
+          passesFilters: matchPercentage > 0 // Property must match at least one filter to be included
+        };
       });
       
-      // Filter by bedrooms
-      if (minBedrooms) {
-        result = result.filter(property => property.bedrooms >= parseInt(minBedrooms));
-      }
-      
-      // Filter by bathrooms
-      if (minBathrooms) {
-        result = result.filter(property => property.bathrooms >= parseInt(minBathrooms));
-      }
-      
-      // Filter by features
-      const activeFeatures = Object.entries(features)
-        .filter(([_, active]) => active)
-        .map(([name]) => name);
-      
-      if (activeFeatures.length > 0) {
-        result = result.filter(property => {
-          // Assuming property has features array or similar
-          // This is a simplified example - adjust based on your actual data structure
-          return activeFeatures.some(feature => 
-            property.features && property.features.includes(feature)
-          );
-        });
-      }
+      // Filter out properties that don't pass any filters
+      result = propertyScores.filter(property => {
+        // Price is mandatory filter
+        const price = parseInt(property.price.replace(/[^0-9]/g, ''));
+        return price >= priceRange[0] && price <= priceRange[1] && property.passesFilters;
+      });
       
       // Sort properties
       switch (sortBy) {

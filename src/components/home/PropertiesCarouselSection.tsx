@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import PropertyCard from '../PropertyCard';
 import { Button } from "@/components/ui/button";
@@ -29,6 +29,9 @@ export default function PropertiesCarouselSection({
   // Reference for accessing the carousel API
   const emblaApiRef = useRef(null);
   
+  // State to track if the user is hovering over the carousel
+  const [isHovering, setIsHovering] = useState(false);
+  
   // Start animation when the section comes into view
   useEffect(() => {
     if (carouselInView) {
@@ -39,7 +42,7 @@ export default function PropertiesCarouselSection({
   return (
     <motion.section 
       ref={carouselRef}
-      className="py-16 bg-white dark:bg-gray-900 overflow-hidden"
+      className="py-16 bg-white overflow-hidden"
       initial={{ opacity: 0, y: 20 }}
       animate={carouselInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.4, ease: 'easeOut' }}
@@ -47,7 +50,7 @@ export default function PropertiesCarouselSection({
       <div className="container mx-auto px-4">
         <div className="text-center mb-8">
           <motion.h2 
-            className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4"
+            className="text-3xl md:text-4xl font-bold mb-4 py-2 px-6 inline-block rounded-lg bg-blue-100 text-blue-800"
             initial={{ opacity: 0, y: 20 }}
             animate={carouselInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.4, delay: 0.1 }}
@@ -55,7 +58,7 @@ export default function PropertiesCarouselSection({
             Featured Properties
           </motion.h2>
           <motion.p 
-            className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto"
+            className="text-gray-600 max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={carouselInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.4, delay: 0.2 }}
@@ -69,6 +72,8 @@ export default function PropertiesCarouselSection({
           initial={{ opacity: 0, scale: 0.95 }}
           animate={carouselInView ? { opacity: 1, scale: 1 } : {}}
           transition={{ duration: 0.3, delay: 0.2 }}
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
         >
           <Carousel
             opts={{
@@ -82,14 +87,11 @@ export default function PropertiesCarouselSection({
               
               // Setup auto-scrolling when API is available
               if (api) {
-                const autoScroll = () => {
-                  if (document.visibilityState === 'visible') {
-                    api.scrollNext();
+                const interval = setInterval(() => {
+                  if (!isHovering && document.visibilityState === 'visible') {
+                    api.scrollNext({ duration: 1.2 });
                   }
-                };
-                
-                // Auto-scroll every 3 seconds
-                const interval = setInterval(autoScroll, 3000);
+                }, 3000);
                 
                 // Clean up interval on API change
                 return () => clearInterval(interval);
@@ -97,9 +99,9 @@ export default function PropertiesCarouselSection({
             }}
           >
             <CarouselContent>
-              {/* Double the property array to create an illusion of infinite content */}
-              {[...properties, ...properties].map((prop, index) => (
-                <CarouselItem key={`${prop.id}-${index}`} className="md:basis-1/2 lg:basis-1/3 pl-4">
+              {/* Only use the original property array for cleaner scrolling */}
+              {properties.map((prop) => (
+                <CarouselItem key={prop.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
                   <div className="p-1">
                     <PropertyCard prop={prop} />
                   </div>
@@ -107,8 +109,8 @@ export default function PropertiesCarouselSection({
               ))}
             </CarouselContent>
             <div className="hidden md:block">
-              <CarouselPrevious className="left-2 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors duration-200" />
-              <CarouselNext className="right-2 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors duration-200" />
+              <CarouselPrevious className="left-2 hover:bg-blue-100 transition-colors duration-200" />
+              <CarouselNext className="right-2 hover:bg-blue-100 transition-colors duration-200" />
             </div>
           </Carousel>
         </motion.div>

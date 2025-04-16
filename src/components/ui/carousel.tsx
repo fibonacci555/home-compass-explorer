@@ -1,3 +1,4 @@
+
 import * as React from "react"
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
@@ -23,7 +24,7 @@ type CarouselContextProps = {
   carouselRef: ReturnType<typeof useEmblaCarousel>[0]
   api: ReturnType<typeof useEmblaCarousel>[1]
   scrollPrev: () => void
-  scrollNext: () => void
+  scrollNext: (options?: { duration?: number }) => void
   canScrollPrev: boolean
   canScrollNext: boolean
 } & CarouselProps
@@ -76,11 +77,11 @@ const Carousel = React.forwardRef<
     }, [])
 
     const scrollPrev = React.useCallback(() => {
-      api?.scrollPrev()
+      api?.scrollPrev({ duration: 0.8 })
     }, [api])
 
-    const scrollNext = React.useCallback(() => {
-      api?.scrollNext()
+    const scrollNext = React.useCallback((options = {}) => {
+      api?.scrollNext({ duration: options.duration || 0.8 })
     }, [api])
 
     const handleKeyDown = React.useCallback(
