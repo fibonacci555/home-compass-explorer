@@ -24,7 +24,7 @@ type CarouselContextProps = {
   carouselRef: ReturnType<typeof useEmblaCarousel>[0]
   api: ReturnType<typeof useEmblaCarousel>[1]
   scrollPrev: () => void
-  scrollNext: (options?: { duration?: number }) => void
+  scrollNext: (event?: React.MouseEvent<HTMLButtonElement>) => void
   canScrollPrev: boolean
   canScrollNext: boolean
 } & CarouselProps
@@ -77,11 +77,11 @@ const Carousel = React.forwardRef<
     }, [])
 
     const scrollPrev = React.useCallback(() => {
-      api?.scrollPrev({ duration: 0.8 })
+      api?.scrollPrev()
     }, [api])
 
-    const scrollNext = React.useCallback((options = {}) => {
-      api?.scrollNext({ duration: options.duration || 0.8 })
+    const scrollNext = React.useCallback((event?: React.MouseEvent<HTMLButtonElement>) => {
+      api?.scrollNext()
     }, [api])
 
     const handleKeyDown = React.useCallback(

@@ -50,7 +50,7 @@ export default function PropertiesCarouselSection({
       <div className="container mx-auto px-4">
         <div className="text-center mb-8">
           <motion.h2 
-            className="text-3xl md:text-4xl font-bold mb-4 py-2 px-6 inline-block rounded-lg bg-blue-100 text-blue-800"
+            className="text-3xl md:text-4xl font-bold mb-4 py-2 px-6 inline-block rounded-lg bg-blue-600 text-white"
             initial={{ opacity: 0, y: 20 }}
             animate={carouselInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.4, delay: 0.1 }}
@@ -89,9 +89,9 @@ export default function PropertiesCarouselSection({
               if (api) {
                 const interval = setInterval(() => {
                   if (!isHovering && document.visibilityState === 'visible') {
-                    api.scrollNext({ duration: 1.2 });
+                    api.scrollNext();
                   }
-                }, 3000);
+                }, 4000); // Slower scroll (4 seconds between slides)
                 
                 // Clean up interval on API change
                 return () => clearInterval(interval);
@@ -103,7 +103,9 @@ export default function PropertiesCarouselSection({
               {properties.map((prop) => (
                 <CarouselItem key={prop.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
                   <div className="p-1">
-                    <PropertyCard prop={prop} />
+                    <Link to={`/properties/${prop.id}`}>
+                      <PropertyCard prop={prop} />
+                    </Link>
                   </div>
                 </CarouselItem>
               ))}
