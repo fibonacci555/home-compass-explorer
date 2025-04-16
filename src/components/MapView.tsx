@@ -135,6 +135,7 @@ function MapView() {
         scrollWheelZoom={true}
         className="h-full w-full z-0"
       >
+        {/* This is the fix - we need to make sure the children are properly provided to the context consumer */}
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
