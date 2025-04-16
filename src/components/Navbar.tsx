@@ -1,15 +1,12 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTheme } from "@/components/ThemeContext";
-import { Moon, Sun } from "lucide-react";
+import { LogIn, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
-  const { theme, setTheme } = useTheme();
-
-  const toggleTheme = () => {
-    setTheme(theme === "light" ? "dark" : "light");
-  };
+  const { theme } = useTheme();
 
   // Navigation Items
   const navItems = [
@@ -44,10 +41,19 @@ const Navbar = () => {
             </div>
           </div>
           <div className="hidden md:block">
-            <div className="ml-4 flex items-center md:ml-6">
-              <Button variant="ghost" size="sm" onClick={toggleTheme}>
-                {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
-              </Button>
+            <div className="ml-4 flex items-center md:ml-6 space-x-2">
+              <Link to="/login">
+                <Button variant="ghost" size="sm" className="flex items-center gap-1">
+                  <LogIn className="h-4 w-4" />
+                  Login
+                </Button>
+              </Link>
+              <Link to="/register">
+                <Button variant="default" size="sm" className="flex items-center gap-1">
+                  <UserPlus className="h-4 w-4" />
+                  Register
+                </Button>
+              </Link>
             </div>
           </div>
           <div className="-mr-2 flex md:hidden">
@@ -108,12 +114,19 @@ const Navbar = () => {
           ))}
         </div>
         <div className="pt-4 pb-3 border-t border-gray-200 dark:border-gray-700">
-          <div className="flex items-center px-5">
-            <div className="ml-auto">
-              <Button variant="ghost" size="sm" onClick={toggleTheme}>
-                {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+          <div className="flex items-center justify-around px-5 py-2">
+            <Link to="/login" className="w-1/2 px-1">
+              <Button variant="outline" size="sm" className="w-full flex items-center justify-center gap-1">
+                <LogIn className="h-4 w-4" />
+                Login
               </Button>
-            </div>
+            </Link>
+            <Link to="/register" className="w-1/2 px-1">
+              <Button variant="default" size="sm" className="w-full flex items-center justify-center gap-1">
+                <UserPlus className="h-4 w-4" />
+                Register
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
