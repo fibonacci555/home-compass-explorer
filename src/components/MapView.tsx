@@ -1,5 +1,5 @@
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
@@ -51,6 +51,12 @@ const MapView = ({ properties }: MapViewProps) => {
       )),
     [properties]
   );
+
+  // Add a useEffect to ensure the map container is properly sized
+  useEffect(() => {
+    // Force a resize event to make Leaflet recalculate dimensions
+    window.dispatchEvent(new Event('resize'));
+  }, []);
 
   return (
     <div className="relative h-full w-full">
@@ -114,18 +120,21 @@ const MapView = ({ properties }: MapViewProps) => {
       </div>
 
       {/* Map */}
-      <MapContainer
-        center={[38.7223, -9.1393]}
-        zoom={12}
-        scrollWheelZoom={true}
-        className="h-full w-full z-0"
-      >
-        <TileLayer
-          attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        <MarkerClusterGroup>{markers}</MarkerClusterGroup>
-      </MapContainer>
+      <div className="h-full w-full z-0">
+        <MapContainer
+          center={[38.7223, -9.1393]}
+          zoom={12}
+          scrollWheelZoom={true}
+          className="h-full w-full"
+          style={{ height: '100%', width: '100%' }}
+        >
+          <TileLayer
+            attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          <MarkerClusterGroup>{markers}</MarkerClusterGroup>
+        </MapContainer>
+      </div>
     </div>
   );
 };

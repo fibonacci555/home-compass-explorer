@@ -7,7 +7,7 @@ const MapPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
       <Navbar />
-      <div className="flex-1 container mx-auto p-4 flex flex-col gap-4">
+      <div className="flex-1 container mx-auto p-4 flex flex-col">
         {/* Map Section */}
         <div className="flex-1 h-[calc(100vh-8rem)] rounded-lg shadow-md overflow-hidden">
           {properties.length === 0 ? (
