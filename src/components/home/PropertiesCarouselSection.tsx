@@ -74,7 +74,6 @@ export default function PropertiesCarouselSection({
             opts={{
               align: "start",
               loop: true,
-              draggable: true,
               containScroll: false,
             }}
             className="w-full"

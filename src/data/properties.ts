@@ -9,6 +9,9 @@ export interface Property extends SearchResult {
   bathrooms: number;
   sqft: number;
   yearBuilt: number;
+  continent: string;
+  features?: string[];
+  listedDate?: string;
 }
 
 export const properties: Property[] = [
@@ -25,7 +28,10 @@ export const properties: Property[] = [
     bedrooms: 2,
     bathrooms: 2,
     sqft: 1250,
-    yearBuilt: 2018
+    yearBuilt: 2018,
+    continent: "North America",
+    features: ["Doorman", "Elevator", "Gym", "Balcony"],
+    listedDate: "2023-05-15"
   },
   {
     id: 2,
@@ -40,7 +46,10 @@ export const properties: Property[] = [
     bedrooms: 5,
     bathrooms: 6,
     sqft: 4500,
-    yearBuilt: 2015
+    yearBuilt: 2015,
+    continent: "North America",
+    features: ["Private Beach", "Pool", "Spa", "Guest House"],
+    listedDate: "2023-06-22"
   },
   {
     id: 3,
@@ -55,7 +64,10 @@ export const properties: Property[] = [
     bedrooms: 3,
     bathrooms: 2.5,
     sqft: 2200,
-    yearBuilt: 2010
+    yearBuilt: 2010,
+    continent: "North America",
+    features: ["Fireplace", "Mountain View", "Deck", "Ski-in/Ski-out"],
+    listedDate: "2023-08-05"
   },
   {
     id: 4,
@@ -70,7 +82,10 @@ export const properties: Property[] = [
     bedrooms: 3,
     bathrooms: 3.5,
     sqft: 3000,
-    yearBuilt: 2017
+    yearBuilt: 2017,
+    continent: "North America",
+    features: ["Concierge", "Rooftop Terrace", "Wine Cellar", "Smart Home"],
+    listedDate: "2023-07-10"
   },
   {
     id: 5,
@@ -85,7 +100,10 @@ export const properties: Property[] = [
     bedrooms: 4,
     bathrooms: 3,
     sqft: 2800,
-    yearBuilt: 1890
+    yearBuilt: 1890,
+    continent: "North America",
+    features: ["Original Hardwood", "Garden", "Fireplace", "Home Office"],
+    listedDate: "2023-09-01"
   },
   {
     id: 6,
@@ -100,7 +118,10 @@ export const properties: Property[] = [
     bedrooms: 3,
     bathrooms: 2,
     sqft: 1800,
-    yearBuilt: 2005
+    yearBuilt: 2005,
+    continent: "North America",
+    features: ["Waterfront", "Dock", "Fireplace", "Deck"],
+    listedDate: "2023-06-15"
   },
   {
     id: 7,
@@ -115,7 +136,10 @@ export const properties: Property[] = [
     bedrooms: 4,
     bathrooms: 3.5,
     sqft: 3200,
-    yearBuilt: 2020
+    yearBuilt: 2020,
+    continent: "North America",
+    features: ["Glass Walls", "Minimalist Design", "Smart Home", "View"],
+    listedDate: "2023-04-20"
   },
   {
     id: 8,
@@ -130,7 +154,10 @@ export const properties: Property[] = [
     bedrooms: 2,
     bathrooms: 2,
     sqft: 1800,
-    yearBuilt: 1920
+    yearBuilt: 1920,
+    continent: "North America",
+    features: ["Exposed Brick", "High Ceilings", "Open Floor Plan", "Industrial Design"],
+    listedDate: "2023-08-12"
   },
   {
     id: 9,
@@ -145,7 +172,10 @@ export const properties: Property[] = [
     bedrooms: 5,
     bathrooms: 5.5,
     sqft: 4800,
-    yearBuilt: 2012
+    yearBuilt: 2012,
+    continent: "North America",
+    features: ["Pool", "Garden", "Guest Suite", "Entertainment Room"],
+    listedDate: "2023-05-30"
   },
   {
     id: 10,
@@ -160,7 +190,10 @@ export const properties: Property[] = [
     bedrooms: 4,
     bathrooms: 4.5,
     sqft: 3600,
-    yearBuilt: 2019
+    yearBuilt: 2019,
+    continent: "North America",
+    features: ["Infinity Pool", "Mountain View", "Smart Home", "Gated Community"],
+    listedDate: "2023-07-05"
   },
   {
     id: 11,
@@ -175,7 +208,10 @@ export const properties: Property[] = [
     bedrooms: 6,
     bathrooms: 5.5,
     sqft: 5200,
-    yearBuilt: 1955
+    yearBuilt: 1955,
+    continent: "North America",
+    features: ["Tennis Court", "Pool", "Library", "Wine Cellar"],
+    listedDate: "2023-09-15"
   },
   {
     id: 12,
@@ -190,6 +226,135 @@ export const properties: Property[] = [
     bedrooms: 7,
     bathrooms: 6.5,
     sqft: 6100,
-    yearBuilt: 1895
+    yearBuilt: 1895,
+    continent: "North America",
+    features: ["Waterfront", "Dock", "Historic Details", "Ocean Views"],
+    listedDate: "2023-04-01"
+  },
+  {
+    id: 13,
+    title: "Elegant Parisian Apartment",
+    location: "Le Marais, Paris",
+    price: "€2,350,000",
+    image: "https://images.unsplash.com/photo-1549517045-bc93de075e53?q=80&w=2071&auto=format&fit=crop",
+    match: 89,
+    latitude: 48.8566,
+    longitude: 2.3522,
+    description: "Stunning Parisian apartment with high ceilings, original moldings, herringbone floors, and balcony overlooking a charming courtyard.",
+    bedrooms: 3,
+    bathrooms: 2,
+    sqft: 1800,
+    yearBuilt: 1890,
+    continent: "Europe",
+    features: ["Balcony", "High Ceilings", "Original Moldings", "Fireplace"],
+    listedDate: "2023-08-15"
+  },
+  {
+    id: 14,
+    title: "London Townhouse",
+    location: "Notting Hill, London",
+    price: "£3,750,000",
+    image: "https://images.unsplash.com/photo-1600585152220-90363fe7e115?q=80&w=2070&auto=format&fit=crop",
+    match: 85,
+    latitude: 51.5074,
+    longitude: -0.1278,
+    description: "Classic London townhouse with contemporary interior, private garden, and convenient access to Hyde Park and Portobello Market.",
+    bedrooms: 4,
+    bathrooms: 3.5,
+    sqft: 2600,
+    yearBuilt: 1905,
+    continent: "Europe",
+    features: ["Garden", "Updated Kitchen", "Home Office", "Wine Cellar"],
+    listedDate: "2023-07-20"
+  },
+  {
+    id: 15,
+    title: "Tokyo Modern Condo",
+    location: "Shibuya, Tokyo",
+    price: "¥175,000,000",
+    image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=2070&auto=format&fit=crop",
+    match: 78,
+    latitude: 35.6762,
+    longitude: 139.6503,
+    description: "Contemporary high-rise condominium with panoramic city views, smart home technology, and exceptional building amenities in vibrant Shibuya.",
+    bedrooms: 2,
+    bathrooms: 2,
+    sqft: 1100,
+    yearBuilt: 2018,
+    continent: "Asia",
+    features: ["City View", "Smart Home", "Gym", "Security"],
+    listedDate: "2023-06-05"
+  },
+  {
+    id: 16,
+    title: "Balinese Villa",
+    location: "Ubud, Bali",
+    price: "$890,000",
+    image: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?q=80&w=2070&auto=format&fit=crop",
+    match: 91,
+    latitude: -8.5069,
+    longitude: 115.2625,
+    description: "Tranquil Balinese villa surrounded by rice terraces with private pool, open-air living areas, and authentic tropical architecture.",
+    bedrooms: 3,
+    bathrooms: 3,
+    sqft: 2200,
+    yearBuilt: 2012,
+    continent: "Asia",
+    features: ["Private Pool", "Rice Field View", "Open-Air Living", "Garden"],
+    listedDate: "2023-09-10"
+  },
+  {
+    id: 17,
+    title: "Sydney Harbour Apartment",
+    location: "Sydney, Australia",
+    price: "AUD 2,950,000",
+    image: "https://images.unsplash.com/photo-1596205350513-5bf7513ef6e9?q=80&w=1976&auto=format&fit=crop",
+    match: 83,
+    latitude: -33.8688,
+    longitude: 151.2093,
+    description: "Luxury apartment with spectacular Sydney Harbour and Opera House views, contemporary design, and exclusive building amenities.",
+    bedrooms: 3,
+    bathrooms: 2,
+    sqft: 1850,
+    yearBuilt: 2015,
+    continent: "Oceania",
+    features: ["Harbour View", "Balcony", "Gym", "Concierge"],
+    listedDate: "2023-05-25"
+  },
+  {
+    id: 18,
+    title: "Rio Beachfront Condo",
+    location: "Copacabana, Rio de Janeiro",
+    price: "R$4,200,000",
+    image: "https://images.unsplash.com/photo-1574362848149-11496d93a7c7?q=80&w=1984&auto=format&fit=crop",
+    match: 80,
+    latitude: -22.9068,
+    longitude: -43.1729,
+    description: "Stylish beachfront apartment with direct access to Copacabana Beach, stunning ocean views, and modern Brazilian design.",
+    bedrooms: 3,
+    bathrooms: 2.5,
+    sqft: 1950,
+    yearBuilt: 2010,
+    continent: "South America",
+    features: ["Beachfront", "Ocean View", "24/7 Security", "Renovated"],
+    listedDate: "2023-04-15"
+  },
+  {
+    id: 19,
+    title: "Cape Town Villa",
+    location: "Camps Bay, Cape Town",
+    price: "R7,500,000",
+    image: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=2070&auto=format&fit=crop",
+    match: 86,
+    latitude: -33.9625,
+    longitude: 18.4037,
+    description: "Spectacular oceanfront villa with Table Mountain views, infinity pool, and modern design perfect for indoor-outdoor living.",
+    bedrooms: 4,
+    bathrooms: 4,
+    sqft: 3800,
+    yearBuilt: 2016,
+    continent: "Africa",
+    features: ["Infinity Pool", "Ocean View", "Mountain View", "Home Theater"],
+    listedDate: "2023-08-01"
   }
 ];

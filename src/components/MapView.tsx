@@ -1,10 +1,9 @@
 
 import React, { useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { X, Home, Building, MapPin } from 'lucide-react';
+import { X } from 'lucide-react';
 import { properties } from '../data/properties';
-import { Button } from './ui/button';
 import L from 'leaflet';
 
 // Fix the missing icon issue in Leaflet
@@ -20,54 +19,8 @@ let DefaultIcon = L.icon({
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
-// Custom marker icons
-const createCustomIcon = (color: string) => {
-  return L.divIcon({
-    className: "custom-icon",
-    html: `<div style="background-color: ${color}; width: 24px; height: 24px; border-radius: 50%; border: 2px solid white; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.3)">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-              <polyline points="9 22 9 12 15 12 15 22"></polyline>
-            </svg>
-           </div>`,
-    iconSize: [24, 24],
-    iconAnchor: [12, 12]
-  });
-};
-
-const luxuryIcon = createCustomIcon('#3b82f6'); // blue
-const apartmentIcon = createCustomIcon('#10b981'); // emerald
-const houseIcon = createCustomIcon('#f59e0b'); // amber
-
-function getIconForProperty(price: string) {
-  const numPrice = parseInt(price.replace(/[^0-9]/g, ''));
-  if (numPrice > 3000000) return luxuryIcon;
-  if (numPrice > 1500000) return apartmentIcon;
-  return houseIcon;
-}
-
-// Create a separate PropertyMarker component to improve structure
-const PropertyMarker = ({ property, onSelect }: { property: any, onSelect: (property: any) => void }) => {
-  return (
-    <Marker
-      position={[property.latitude, property.longitude]}
-      icon={getIconForProperty(property.price)}
-      eventHandlers={{
-        click: () => onSelect(property),
-      }}
-    >
-      <Popup>
-        <div className="p-1">
-          <p className="font-semibold">{property.title}</p>
-          <p className="text-sm text-gray-600">{property.price}</p>
-        </div>
-      </Popup>
-    </Marker>
-  );
-}
-
 function MapView() {
-  const [selectedProperty, setSelectedProperty] = useState<any>(null);
+  const [selectedProperty, setSelectedProperty] = useState(null);
 
   return (
     <div className="relative h-[calc(100vh-4rem)] w-full overflow-hidden">
@@ -107,10 +60,7 @@ function MapView() {
               <p className="text-2xl font-semibold text-blue-600 dark:text-blue-400 mb-2">
                 {selectedProperty.price}
               </p>
-              <div className="flex items-center mb-4">
-                <MapPin className="h-4 w-4 text-gray-500 dark:text-gray-400 mr-1" />
-                <p className="text-gray-700 dark:text-gray-300">{selectedProperty.location}</p>
-              </div>
+              <p className="text-gray-700 dark:text-gray-300 mb-4">{selectedProperty.location}</p>
               
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
@@ -131,18 +81,9 @@ function MapView() {
                 </div>
               </div>
               
-              <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
+              <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
                 {selectedProperty.description}
               </p>
-              
-              <div className="flex gap-3">
-                <Button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
-                  Contact Agent
-                </Button>
-                <Button variant="outline" className="flex-1">
-                  Schedule Tour
-                </Button>
-              </div>
             </>
           )}
         </div>
@@ -161,32 +102,15 @@ function MapView() {
         />
         
         {properties.map((property) => (
-          <PropertyMarker 
+          <Marker
             key={property.id}
-            property={property} 
-            onSelect={setSelectedProperty} 
+            position={[property.latitude, property.longitude]}
+            eventHandlers={{
+              click: () => setSelectedProperty(property),
+            }}
           />
         ))}
       </MapContainer>
-      
-      {/* Legend */}
-      <div className="absolute bottom-5 left-5 bg-white dark:bg-gray-900 p-3 rounded-lg shadow-lg z-10 border border-gray-200 dark:border-gray-700">
-        <p className="font-semibold mb-2 text-sm">Property Types</p>
-        <div className="space-y-2">
-          <div className="flex items-center">
-            <div className="w-4 h-4 rounded-full bg-blue-500 mr-2"></div>
-            <span className="text-xs">Luxury ($3M+)</span>
-          </div>
-          <div className="flex items-center">
-            <div className="w-4 h-4 rounded-full bg-emerald-500 mr-2"></div>
-            <span className="text-xs">Mid-Range ($1.5-3M)</span>
-          </div>
-          <div className="flex items-center">
-            <div className="w-4 h-4 rounded-full bg-amber-500 mr-2"></div>
-            <span className="text-xs">Standard (Under $1.5M)</span>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
