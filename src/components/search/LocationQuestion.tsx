@@ -14,8 +14,11 @@ interface LocationQuestionProps {
 export default function LocationQuestion({
   selectedLocation,
   setSelectedLocation,
-  locations
+  locations = [] // Provide default empty array to prevent undefined
 }: LocationQuestionProps) {
+  // Ensure locations is always an array
+  const safeLocations = Array.isArray(locations) ? locations : [];
+  
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -32,7 +35,7 @@ export default function LocationQuestion({
           <CommandInput placeholder="Search location..." />
           <CommandEmpty>No location found.</CommandEmpty>
           <CommandGroup className="max-h-60 overflow-auto">
-            {locations.map((location) => (
+            {safeLocations.map((location) => (
               <CommandItem
                 key={location}
                 onSelect={() => {
