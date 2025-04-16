@@ -6,7 +6,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from 'react-router-dom';
 
-// Most viewed properties data
+// Most viewed properties data - adding more properties
 const mostViewedProperties = [
   {
     id: 1,
@@ -39,6 +39,38 @@ const mostViewedProperties = [
     price: "$2,600,000",
     image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070&auto=format&fit=crop",
     views: 1975
+  },
+  {
+    id: 5,
+    title: "Historic Townhouse",
+    location: "Boston, Massachusetts",
+    price: "$1,850,000",
+    image: "https://images.unsplash.com/photo-1518780664697-55e3ad937233?q=80&w=1965&auto=format&fit=crop",
+    views: 1842
+  },
+  {
+    id: 6,
+    title: "Lakefront Cottage",
+    location: "Lake Tahoe, Nevada",
+    price: "$1,350,000",
+    image: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?q=80&w=2070&auto=format&fit=crop",
+    views: 1756
+  },
+  {
+    id: 7,
+    title: "Modern Glass House",
+    location: "Seattle, Washington",
+    price: "$2,250,000",
+    image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=2070&auto=format&fit=crop",
+    views: 1653
+  },
+  {
+    id: 8,
+    title: "Urban Loft",
+    location: "Brooklyn, New York",
+    price: "$1,450,000",
+    image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=2070&auto=format&fit=crop",
+    views: 1589
   }
 ];
 
@@ -90,7 +122,7 @@ export default function MostViewedPropertiesSection({ featuresRef, featuresInVie
               key={property.id}
               initial={{ opacity: 0, y: 20 }}
               animate={featuresInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.1 * (index + 1) }}
+              transition={{ duration: 0.5, delay: 0.1 * (index % 4 + 1) }}
             >
               <Card className="overflow-hidden h-full hover:shadow-lg transition-shadow duration-300">
                 <div className="relative">
@@ -120,6 +152,19 @@ export default function MostViewedPropertiesSection({ featuresRef, featuresInVie
             </motion.div>
           ))}
         </div>
+
+        <motion.div
+          className="text-center mt-12"
+          initial={{ opacity: 0, y: 20 }}
+          animate={featuresInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, delay: 0.6 }}
+        >
+          <Button asChild className="bg-blue-600 hover:bg-blue-700">
+            <Link to="/properties" className="flex items-center gap-2">
+              Show More Properties <ArrowRight className="h-4 w-4" />
+            </Link>
+          </Button>
+        </motion.div>
       </div>
     </motion.section>
   );

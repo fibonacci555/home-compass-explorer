@@ -1,49 +1,18 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
 import PropertyCard from '../PropertyCard';
-
-// Sample property data
-const properties = [
-  {
-    id: 1,
-    title: 'Modern Apartment',
-    location: 'Downtown Manhattan',
-    price: '$1,250,000',
-    image: 'https://images.unsplash.com/photo-1567496898669-ee935f5f647a?q=80&w=2071&auto=format&fit=crop',
-  },
-  {
-    id: 2,
-    title: 'Luxury Beachfront Villa',
-    location: 'Malibu, California',
-    price: '$3,850,000',
-    image: 'https://images.unsplash.com/photo-1613977257365-aaae5a9817ff?q=80&w=2187&auto=format&fit=crop',
-  },
-  {
-    id: 3,
-    title: 'Cozy Mountain Retreat',
-    location: 'Aspen, Colorado',
-    price: '$1,975,000',
-    image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2075&auto=format&fit=crop',
-  },
-  {
-    id: 4,
-    title: 'Penthouse with City View',
-    location: 'Chicago, Illinois',
-    price: '$2,600,000',
-    image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070&auto=format&fit=crop',
-  },
-  {
-    id: 5,
-    title: 'Historic Townhouse',
-    location: 'Boston, Massachusetts',
-    price: '$1,850,000',
-    image: 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?q=80&w=1965&auto=format&fit=crop',
-  },
-];
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { properties } from '@/data/properties';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 interface PropertiesCarouselSectionProps {
   carouselRef: React.RefObject<HTMLDivElement>;
@@ -54,29 +23,6 @@ export default function PropertiesCarouselSection({
   carouselRef, 
   carouselInView 
 }: PropertiesCarouselSectionProps) {
-  // Carousel settings
-  const sliderSettings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    arrows: true,
-    autoplay: true,
-    autoplaySpeed: 5000,
-    pauseOnHover: true,
-    responsive: [
-      {
-        breakpoint: 1280,
-        settings: { slidesToShow: 2, slidesToScroll: 1 },
-      },
-      {
-        breakpoint: 768,
-        settings: { slidesToShow: 1, slidesToScroll: 1 },
-      },
-    ],
-  };
-
   return (
     <motion.section 
       ref={carouselRef}
@@ -106,18 +52,32 @@ export default function PropertiesCarouselSection({
         </div>
         
         <motion.div 
-          className="max-w-6xl mx-auto"
+          className="max-w-6xl mx-auto relative"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={carouselInView ? { opacity: 1, scale: 1 } : {}}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
-          <Slider {...sliderSettings}>
-            {properties.map((prop) => (
-              <div key={prop.id} className="px-3 py-2">
-                <PropertyCard prop={prop} />
-              </div>
-            ))}
-          </Slider>
+          <Carousel
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+            className="w-full"
+          >
+            <CarouselContent>
+              {properties.map((prop, index) => (
+                <CarouselItem key={prop.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                  <div className="p-1">
+                    <PropertyCard prop={prop} />
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <div className="hidden md:block">
+              <CarouselPrevious className="left-2" />
+              <CarouselNext className="right-2" />
+            </div>
+          </Carousel>
         </motion.div>
         
         <motion.div 
@@ -126,9 +86,11 @@ export default function PropertiesCarouselSection({
           animate={carouselInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
-          <button className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow transition-colors duration-300">
-            View All Properties
-          </button>
+          <Button asChild className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow transition-colors duration-300">
+            <Link to="/properties" className="flex items-center gap-2">
+              View All Properties <ArrowRight className="h-4 w-4" />
+            </Link>
+          </Button>
         </motion.div>
       </div>
     </motion.section>
