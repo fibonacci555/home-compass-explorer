@@ -10,15 +10,17 @@ interface MapProps {
     end: { lat: number; lng: number; label?: string };
   }>;
   lineColor?: string;
+  animationSpeed?: number; // New prop for controlling animation speed
 }
 
 export function WorldMap({
   dots = [],
   lineColor = "#0ea5e9",
+  animationSpeed = 0.5, // Default animation speed
 }: MapProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const mapRef = useRef(null);
-  const isInView = useInView(mapRef, { once: true, margin: "-100px" });
+  const isInView = useInView(mapRef, { once: true, margin: "-50px" });  // More responsive margin
 
   const map = new DottedMap({ height: 100, grid: "diagonal" });
   const { theme } = useTheme();
@@ -69,13 +71,17 @@ export function WorldMap({
     return `rgb(${r}, ${g}, ${b})`;
   };
 
+  // Calculate animation duration based on speed factor
+  // Lower animationSpeed value = faster animations
+  const calculateDuration = (baseDuration: number) => baseDuration * animationSpeed;
+
   return (
     <motion.div
       ref={mapRef}
       className="w-full aspect-[2/1] rounded-lg relative font-sans overflow-hidden"
       initial={{ opacity: 0, y: 20 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, ease: "easeOut" }}
+      transition={{ duration: calculateDuration(0.4), ease: "easeOut" }}
     >
       <img
         src={`data:image/svg+xml;utf8,${encodeURIComponent(svgMap)}`}
@@ -104,16 +110,15 @@ export function WorldMap({
                 } : {}}
                 transition={{
                   pathLength: {
-                    duration: 2 + Math.random(), // Randomize duration slightly
-                    delay: i * 0.1, // Staggered start for each path
+                    duration: calculateDuration(1.5 + Math.random() * 0.5), // Shorter, more consistent duration
+                    delay: i * 0.05 * animationSpeed, // Faster staggered start
                   },
                   opacity: {
-                    duration: 3 + Math.random() * 2,
+                    duration: calculateDuration(2 + Math.random()),
                     repeat: Infinity,
                     repeatType: "reverse",
                   }
                 }}
-                key={`path-${i}`}
               />
             </g>
           );
@@ -143,7 +148,7 @@ export function WorldMap({
                   fill={dotColor}
                   initial={{ scale: 0 }}
                   animate={isInView ? { scale: 1 } : {}}
-                  transition={{ delay: i * 0.05, duration: 0.5 }}
+                  transition={{ delay: i * 0.03 * animationSpeed, duration: calculateDuration(0.3) }}
                 />
                 <motion.circle
                   cx={startPoint.x}
@@ -156,9 +161,9 @@ export function WorldMap({
                     opacity: [0.5, 0, 0.5],
                   }}
                   transition={{
-                    duration: 2 + Math.random(),
+                    duration: calculateDuration(1.5 + Math.random() * 0.5),
                     repeat: Infinity,
-                    delay: i * 0.1,
+                    delay: i * 0.05 * animationSpeed,
                   }}
                 />
                 {/* Add starburst effect for emphasis */}
@@ -175,10 +180,10 @@ export function WorldMap({
                     opacity: [0, 0.3, 0]
                   } : {}}
                   transition={{
-                    duration: 1.5,
+                    duration: calculateDuration(1),
                     repeat: Infinity,
-                    repeatDelay: 3 + Math.random() * 5,
-                    delay: i * 0.2 + 1
+                    repeatDelay: calculateDuration(2 + Math.random() * 3),
+                    delay: i * 0.1 * animationSpeed + calculateDuration(0.5)
                   }}
                 />
                 {dot.start.label && (
@@ -201,7 +206,7 @@ export function WorldMap({
                   fill={dotColor}
                   initial={{ scale: 0 }}
                   animate={isInView ? { scale: 1 } : {}}
-                  transition={{ delay: i * 0.05 + 0.5, duration: 0.5 }}
+                  transition={{ delay: i * 0.03 * animationSpeed + calculateDuration(0.3), duration: calculateDuration(0.3) }}
                 />
                 <motion.circle
                   cx={endPoint.x}
@@ -214,9 +219,9 @@ export function WorldMap({
                     opacity: [0.5, 0, 0.5],
                   }}
                   transition={{
-                    duration: 2 + Math.random(),
+                    duration: calculateDuration(1.5 + Math.random() * 0.5),
                     repeat: Infinity,
-                    delay: i * 0.1 + 0.5,
+                    delay: i * 0.05 * animationSpeed + calculateDuration(0.3),
                   }}
                 />
                 {dot.end.label && (

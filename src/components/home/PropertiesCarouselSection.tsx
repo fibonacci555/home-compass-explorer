@@ -1,6 +1,6 @@
 
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useRef } from 'react';
+import { motion, useAnimation } from 'framer-motion';
 import PropertyCard from '../PropertyCard';
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from 'lucide-react';
@@ -23,21 +23,34 @@ export default function PropertiesCarouselSection({
   carouselRef, 
   carouselInView 
 }: PropertiesCarouselSectionProps) {
+  // Animation controls for smooth transitions
+  const controls = useAnimation();
+  
+  // Reference for accessing the carousel API
+  const emblaApiRef = useRef(null);
+  
+  // Start animation when the section comes into view
+  useEffect(() => {
+    if (carouselInView) {
+      controls.start({ opacity: 1, y: 0 });
+    }
+  }, [carouselInView, controls]);
+
   return (
     <motion.section 
       ref={carouselRef}
-      className="py-20 bg-white dark:bg-gray-900 overflow-hidden"
+      className="py-16 bg-white dark:bg-gray-900 overflow-hidden"
       initial={{ opacity: 0, y: 20 }}
       animate={carouselInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
+      transition={{ duration: 0.4, ease: 'easeOut' }}
     >
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
+        <div className="text-center mb-8">
           <motion.h2 
             className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4"
             initial={{ opacity: 0, y: 20 }}
             animate={carouselInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.1 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
           >
             Featured Properties
           </motion.h2>
@@ -45,28 +58,49 @@ export default function PropertiesCarouselSection({
             className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={carouselInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
           >
             Explore our handpicked selection of premium properties from around the world
           </motion.p>
         </div>
         
         <motion.div 
-          className="max-w-6xl mx-auto relative"
+          className="max-w-7xl mx-auto relative"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={carouselInView ? { opacity: 1, scale: 1 } : {}}
-          transition={{ duration: 0.5, delay: 0.3 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
         >
           <Carousel
             opts={{
               align: "start",
               loop: true,
+              draggable: true,
+              containScroll: false,
             }}
             className="w-full"
+            setApi={(api) => {
+              emblaApiRef.current = api;
+              
+              // Setup auto-scrolling when API is available
+              if (api) {
+                const autoScroll = () => {
+                  if (document.visibilityState === 'visible') {
+                    api.scrollNext();
+                  }
+                };
+                
+                // Auto-scroll every 3 seconds
+                const interval = setInterval(autoScroll, 3000);
+                
+                // Clean up interval on API change
+                return () => clearInterval(interval);
+              }
+            }}
           >
             <CarouselContent>
-              {properties.map((prop, index) => (
-                <CarouselItem key={prop.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+              {/* Double the property array to create an illusion of infinite content */}
+              {[...properties, ...properties].map((prop, index) => (
+                <CarouselItem key={`${prop.id}-${index}`} className="md:basis-1/2 lg:basis-1/3 pl-4">
                   <div className="p-1">
                     <PropertyCard prop={prop} />
                   </div>
@@ -74,17 +108,17 @@ export default function PropertiesCarouselSection({
               ))}
             </CarouselContent>
             <div className="hidden md:block">
-              <CarouselPrevious className="left-2" />
-              <CarouselNext className="right-2" />
+              <CarouselPrevious className="left-2 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors duration-200" />
+              <CarouselNext className="right-2 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors duration-200" />
             </div>
           </Carousel>
         </motion.div>
         
         <motion.div 
-          className="text-center mt-12"
+          className="text-center mt-10"
           initial={{ opacity: 0, y: 20 }}
           animate={carouselInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.4 }}
+          transition={{ duration: 0.4, delay: 0.3 }}
         >
           <Button asChild className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow transition-colors duration-300">
             <Link to="/properties" className="flex items-center gap-2">

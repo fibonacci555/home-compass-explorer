@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { properties } from '@/data/properties';
 import { Home, Filter, X, Check, DollarSign, MapPin, Bed, Bath, Square } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -22,6 +21,7 @@ import { Slider } from '@/components/ui/slider';
 import { Checkbox } from '@/components/ui/checkbox';
 import { motion } from 'framer-motion';
 import Navbar from '@/components/Navbar';
+import { toast } from 'sonner';
 
 const PropertiesPage = () => {
   const [priceRange, setPriceRange] = useState([500000, 5000000]);
@@ -34,6 +34,87 @@ const PropertiesPage = () => {
     garden: false,
     balcony: false,
   });
+  
+  const [filteredProperties, setFilteredProperties] = useState(properties);
+  const [isFiltering, setIsFiltering] = useState(false);
+
+  // Apply filters automatically when any filter changes
+  useEffect(() => {
+    setIsFiltering(true);
+    
+    const applyFilters = () => {
+      let result = [...properties];
+      
+      // Filter by price range
+      result = result.filter(property => {
+        const price = parseInt(property.price.replace(/[^0-9]/g, ''));
+        return price >= priceRange[0] && price <= priceRange[1];
+      });
+      
+      // Filter by bedrooms
+      if (minBedrooms) {
+        result = result.filter(property => property.bedrooms >= parseInt(minBedrooms));
+      }
+      
+      // Filter by bathrooms
+      if (minBathrooms) {
+        result = result.filter(property => property.bathrooms >= parseInt(minBathrooms));
+      }
+      
+      // Filter by features
+      const activeFeatures = Object.entries(features)
+        .filter(([_, active]) => active)
+        .map(([name]) => name);
+      
+      if (activeFeatures.length > 0) {
+        result = result.filter(property => {
+          // Assuming property has features array or similar
+          // This is a simplified example - adjust based on your actual data structure
+          return activeFeatures.some(feature => 
+            property.features && property.features.includes(feature)
+          );
+        });
+      }
+      
+      // Sort properties
+      switch (sortBy) {
+        case "price-asc":
+          result.sort((a, b) => {
+            const priceA = parseInt(a.price.replace(/[^0-9]/g, ''));
+            const priceB = parseInt(b.price.replace(/[^0-9]/g, ''));
+            return priceA - priceB;
+          });
+          break;
+        case "price-desc":
+          result.sort((a, b) => {
+            const priceA = parseInt(a.price.replace(/[^0-9]/g, ''));
+            const priceB = parseInt(b.price.replace(/[^0-9]/g, ''));
+            return priceB - priceA;
+          });
+          break;
+        case "newest":
+          // Assuming properties have a 'date' property
+          result.sort((a, b) => {
+            const dateA = a.listedDate ? new Date(a.listedDate).getTime() : 0;
+            const dateB = b.listedDate ? new Date(b.listedDate).getTime() : 0;
+            return dateB - dateA;
+          });
+          break;
+        // If recommended or other, keep original order
+      }
+      
+      setFilteredProperties(result);
+      setIsFiltering(false);
+      
+      // Show toast notification about filter results
+      toast(`Found ${result.length} properties matching your criteria`);
+    };
+    
+    // Debounce filter application to avoid excessive re-renders during slider movement
+    const timeoutId = setTimeout(applyFilters, 300);
+    
+    return () => clearTimeout(timeoutId);
+  }, [priceRange, minBedrooms, minBathrooms, features, sortBy]);
 
   const formatPrice = (price: number) => {
     return price.toLocaleString('en-US', {
@@ -41,6 +122,19 @@ const PropertiesPage = () => {
       currency: 'USD',
       maximumFractionDigits: 0,
     });
+  };
+  
+  const resetFilters = () => {
+    setPriceRange([500000, 5000000]);
+    setMinBedrooms(undefined);
+    setMinBathrooms(undefined);
+    setFeatures({
+      pool: false,
+      garage: false,
+      garden: false,
+      balcony: false,
+    });
+    toast("Filters have been reset");
   };
 
   return (
@@ -151,9 +245,8 @@ const PropertiesPage = () => {
                     </div>
                   </div>
                   
-                  <div className="pt-4 flex gap-2">
-                    <Button className="flex-1">Apply Filters</Button>
-                    <Button variant="outline" className="flex-1">Reset</Button>
+                  <div className="pt-4">
+                    <Button onClick={resetFilters} variant="outline" className="w-full">Reset Filters</Button>
                   </div>
                 </div>
               </SheetContent>
@@ -162,57 +255,90 @@ const PropertiesPage = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {properties.map((property) => (
-            <motion.div
-              key={property.id}
-              className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-100 dark:border-gray-700 hover:shadow-lg transition-shadow"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              whileHover={{ y: -5 }}
-            >
-              <div className="relative">
-                <img 
-                  src={property.image} 
-                  alt={property.title} 
-                  className="w-full h-48 object-cover"
-                />
-                <div className="absolute top-3 right-3 bg-white dark:bg-gray-900 rounded-full px-3 py-1 text-sm font-medium text-blue-600 dark:text-blue-400">
-                  {property.match}% Match
+          {isFiltering ? (
+            // Loading state with skeleton cards
+            Array.from({ length: 6 }).map((_, i) => (
+              <div key={`skeleton-${i}`} className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-100 dark:border-gray-700 animate-pulse">
+                <div className="w-full h-48 bg-gray-200 dark:bg-gray-700"></div>
+                <div className="p-5 space-y-3">
+                  <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+                  <div className="flex justify-between space-x-4">
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div>
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div>
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div>
+                  </div>
+                  <div className="flex justify-between items-center pt-2">
+                    <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
+                    <div className="h-9 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div>
+                  </div>
                 </div>
               </div>
-              
-              <div className="p-5">
-                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">{property.title}</h3>
-                <div className="flex items-center mb-3">
-                  <MapPin className="h-4 w-4 text-gray-500 dark:text-gray-400 mr-1" />
-                  <p className="text-gray-600 dark:text-gray-300 text-sm">{property.location}</p>
+            ))
+          ) : filteredProperties.length > 0 ? (
+            filteredProperties.map((property) => (
+              <motion.div
+                key={property.id}
+                className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-100 dark:border-gray-700 hover:shadow-lg transition-shadow"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2 }}
+                whileHover={{ y: -5 }}
+              >
+                <div className="relative">
+                  <img 
+                    src={property.image} 
+                    alt={property.title} 
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="absolute top-3 right-3 bg-white dark:bg-gray-900 rounded-full px-3 py-1 text-sm font-medium text-blue-600 dark:text-blue-400">
+                    {property.match}% Match
+                  </div>
                 </div>
                 
-                <div className="flex justify-between mb-4 text-sm text-gray-600 dark:text-gray-300">
-                  <div className="flex items-center">
-                    <Bed className="h-4 w-4 mr-1" />
-                    <span>{property.bedrooms} beds</span>
+                <div className="p-5">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">{property.title}</h3>
+                  <div className="flex items-center mb-3">
+                    <MapPin className="h-4 w-4 text-gray-500 dark:text-gray-400 mr-1" />
+                    <p className="text-gray-600 dark:text-gray-300 text-sm">{property.location}</p>
                   </div>
-                  <div className="flex items-center">
-                    <Bath className="h-4 w-4 mr-1" />
-                    <span>{property.bathrooms} baths</span>
+                  
+                  <div className="flex justify-between mb-4 text-sm text-gray-600 dark:text-gray-300">
+                    <div className="flex items-center">
+                      <Bed className="h-4 w-4 mr-1" />
+                      <span>{property.bedrooms} beds</span>
+                    </div>
+                    <div className="flex items-center">
+                      <Bath className="h-4 w-4 mr-1" />
+                      <span>{property.bathrooms} baths</span>
+                    </div>
+                    <div className="flex items-center">
+                      <Square className="h-4 w-4 mr-1" />
+                      <span>{property.sqft} sqft</span>
+                    </div>
                   </div>
-                  <div className="flex items-center">
-                    <Square className="h-4 w-4 mr-1" />
-                    <span>{property.sqft} sqft</span>
+                  
+                  <div className="flex justify-between items-center">
+                    <p className="text-xl font-bold text-blue-600 dark:text-blue-400">{property.price}</p>
+                    <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                      View Details
+                    </Button>
                   </div>
                 </div>
-                
-                <div className="flex justify-between items-center">
-                  <p className="text-xl font-bold text-blue-600 dark:text-blue-400">{property.price}</p>
-                  <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-                    View Details
-                  </Button>
-                </div>
+              </motion.div>
+            ))
+          ) : (
+            <div className="col-span-full text-center py-10">
+              <div className="text-gray-500 dark:text-gray-400 mb-4">
+                <Filter className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                <h3 className="text-xl font-semibold">No properties found</h3>
               </div>
-            </motion.div>
-          ))}
+              <p className="text-gray-500 dark:text-gray-400 mb-6">
+                Try adjusting your filters to see more results
+              </p>
+              <Button onClick={resetFilters}>Reset All Filters</Button>
+            </div>
+          )}
         </div>
       </div>
     </div>
