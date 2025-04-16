@@ -1,27 +1,21 @@
-
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { X } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Property } from '@/types/property';
 
 // Fix Leaflet default icon paths
-delete (L.Icon.Default.prototype as any)._getIconUrl;
+delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
   iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 });
 
-interface MapViewProps {
-  properties: Property[];
-}
-
-const MapView = ({ properties }: MapViewProps) => {
-  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
+const MapView = ({ properties }) => {
+  const [selectedProperty, setSelectedProperty] = useState(null);
 
   // Memoize markers to prevent unnecessary re-renders
   const markers = useMemo(
@@ -29,7 +23,7 @@ const MapView = ({ properties }: MapViewProps) => {
       properties.map((property) => (
         <Marker
           key={property.id}
-          position={[property.latitude || 0, property.longitude || 0]}
+          position={[property.latitude, property.longitude]}
           eventHandlers={{
             click: () => setSelectedProperty(property),
           }}
@@ -51,12 +45,6 @@ const MapView = ({ properties }: MapViewProps) => {
       )),
     [properties]
   );
-
-  // Add a useEffect to ensure the map container is properly sized
-  useEffect(() => {
-    // Force a resize event to make Leaflet recalculate dimensions
-    window.dispatchEvent(new Event('resize'));
-  }, []);
 
   return (
     <div className="relative h-full w-full">
@@ -94,10 +82,7 @@ const MapView = ({ properties }: MapViewProps) => {
                 src={selectedProperty.image}
                 alt={selectedProperty.title}
                 className="w-full h-40 object-cover rounded-lg"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = '/placeholder.svg';
-                }}
+                onError={(e) => (e.target.src = '/fallback-image.jpg')} // Fallback image
               />
               <p className="text-lg font-semibold text-emerald-600">
                 {selectedProperty.price}
@@ -120,21 +105,20 @@ const MapView = ({ properties }: MapViewProps) => {
       </div>
 
       {/* Map */}
-      <div className="h-full w-full z-0">
-        <MapContainer
-          center={[38.7223, -9.1393]}
-          zoom={12}
-          scrollWheelZoom={true}
-          className="h-full w-full"
-          style={{ height: '100%', width: '100%' }}
-        >
-          <TileLayer
-            attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          <MarkerClusterGroup>{markers}</MarkerClusterGroup>
-        </MapContainer>
-      </div>
+      <MapContainer
+        center={[38.7223, -9.1393]}
+        zoom={12}
+        scrollWheelZoom={true}
+        className="h-full w-full z-0"
+        role="region"
+        aria-label="Interactive map of properties"
+      >
+        <TileLayer
+          attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <MarkerClusterGroup>{markers}</MarkerClusterGroup>
+      </MapContainer>
     </div>
   );
 };
