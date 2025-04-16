@@ -7,6 +7,7 @@ import { mockResults, locations } from '@/data/mockData';
 import SearchBar from './search/SearchBar';
 import QuestionCard from './search/QuestionCard';
 import LocationQuestion from './search/LocationQuestion';
+import SimpleLocationDropdown from './search/SimpleLocationDropdown';
 import BudgetQuestion from './search/BudgetQuestion';
 import PropertyTypeQuestion from './search/PropertyTypeQuestion';
 import BedroomsQuestion from './search/BedroomsQuestion';
@@ -24,6 +25,9 @@ export default function InteractiveSearch() {
   const [selectedResult, setSelectedResult] = useState<SearchResult | null>(null);
   const [showResults, setShowResults] = useState(false);
   
+  // Ensure locations is defined and an array
+  const locationsList = Array.isArray(locations) ? locations : [];
+  
   const propertyTypes: PropertyType[] = [
     { id: 'house', label: 'House', icon: Home },
     { id: 'apartment', label: 'Apartment', icon: Building },
@@ -35,11 +39,14 @@ export default function InteractiveSearch() {
     {
       id: 'location',
       question: 'Where are you looking to invest?',
-      component: <LocationQuestion 
-        selectedLocation={selectedLocation} 
-        setSelectedLocation={setSelectedLocation} 
-        locations={locations} 
-      />,
+      component: (
+        // Use SimpleLocationDropdown instead of LocationQuestion to avoid cmdk issues
+        <SimpleLocationDropdown 
+          selectedLocation={selectedLocation} 
+          setSelectedLocation={setSelectedLocation} 
+          locations={locationsList} 
+        />
+      ),
     },
     {
       id: 'budget',

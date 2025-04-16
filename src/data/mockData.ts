@@ -28,6 +28,7 @@ export const mockResults: SearchResult[] = [
   }
 ];
 
+// Ensure this is always defined as an array
 export const locations = [
   "New York, NY",
   "Los Angeles, CA",
