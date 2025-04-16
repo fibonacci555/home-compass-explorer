@@ -1,5 +1,5 @@
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { Search, X } from 'lucide-react';
 import MapView from '@/components/MapView';
 import { properties } from '@/data/properties';
@@ -70,7 +70,7 @@ const MapPage = () => {
 
         {/* Property Cards (when searching) */}
         {searchQuery && filteredProperties.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4 overflow-x-auto">
             {filteredProperties.slice(0, 3).map((property) => (
               <Card 
                 key={property.id}
@@ -116,7 +116,7 @@ const MapPage = () => {
           </div>
         )}
 
-        {/* Map Section - Made smaller to accommodate property cards */}
+        {/* Map Section */}
         <div className="flex-1 h-[calc(100vh-16rem)] lg:h-[calc(100vh-12rem)] rounded-lg shadow-md overflow-hidden">
           {properties.length === 0 ? (
             <div className="h-full flex items-center justify-center bg-white dark:bg-gray-800">

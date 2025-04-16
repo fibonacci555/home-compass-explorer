@@ -1,18 +1,4 @@
-
-import { SearchResult } from "@/types/search";
-
-export interface Property extends SearchResult {
-  latitude: number;
-  longitude: number;
-  description: string;
-  bedrooms: number;
-  bathrooms: number;
-  sqft: number;
-  yearBuilt: number;
-  continent: string;
-  features?: string[];
-  listedDate?: string;
-}
+import { Property } from '@/types/property';
 
 export const properties: Property[] = [
   {

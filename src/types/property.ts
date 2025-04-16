@@ -6,16 +6,14 @@ export interface Property {
   price: string;
   location: string;
   image: string;
-  bedrooms: number;
-  bathrooms: number;
-  area?: string;
-  features?: string[];
-  type?: string;
-  status?: string;
-  listedDate?: string;
+  match?: number;
   latitude?: number;
   longitude?: number;
+  bedrooms: number;
+  bathrooms: number;
   sqft?: number;
   yearBuilt?: number;
   continent?: string;
+  features?: string[];
+  listedDate?: string;
 }
