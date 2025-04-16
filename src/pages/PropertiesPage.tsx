@@ -5,7 +5,7 @@ import Navbar from '@/components/Navbar';
 import PropertyFilters from '@/components/properties/PropertyFilters';
 import PropertySorting from '@/components/properties/PropertySorting';
 import PropertyList from '@/components/properties/PropertyList';
-import { usePropertyFilters } from '@/hooks/usePropertyFilters';
+import { usePropertyFilters, FeatureToggles } from '@/hooks/usePropertyFilters';
 
 const PropertiesPage = () => {
   const {
@@ -24,9 +24,9 @@ const PropertiesPage = () => {
     resetFilters
   } = usePropertyFilters(properties);
 
-  // Convert setFeatures to accept a complete object (Record<string, boolean>)
+  // Updated to accept FeatureToggles type which now has an index signature
   const handleFeaturesChange = (newFeatures: Record<string, boolean>) => {
-    setFeatures(newFeatures);
+    setFeatures(newFeatures as FeatureToggles);
   };
 
   return (
@@ -48,7 +48,7 @@ const PropertiesPage = () => {
               setMinBedrooms={setMinBedrooms}
               minBathrooms={minBathrooms}
               setMinBathrooms={setMinBathrooms}
-              features={features}
+              features={features as Record<string, boolean>}
               setFeatures={handleFeaturesChange}
               resetFilters={resetFilters}
             />

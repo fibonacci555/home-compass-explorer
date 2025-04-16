@@ -2,11 +2,13 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 
-interface FeatureToggles {
+// Define the FeatureToggles interface for better type safety
+export interface FeatureToggles {
   pool: boolean;
   garage: boolean;
   garden: boolean;
   balcony: boolean;
+  [key: string]: boolean; // Add index signature to make it assignable to Record<string, boolean>
 }
 
 export const usePropertyFilters = (properties: any[]) => {
