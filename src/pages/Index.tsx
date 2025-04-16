@@ -7,6 +7,7 @@ import PropertiesCarouselSection from '../components/home/PropertiesCarouselSect
 import MostViewedPropertiesSection from '../components/home/FeaturesSection';
 import TestimonialsSection from '../components/home/TestimonialsSection';
 import Footer from '../components/home/Footer';
+import { InfiniteMovingCards } from '@/components/home/InfiniteMovingCards';
 
 // Main Component
 export default function Index() {
@@ -25,7 +26,7 @@ export default function Index() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       <Navbar />
       <HeroSection heroRef={heroRef} heroInView={heroInView} />
-      <PropertiesCarouselSection carouselRef={carouselRef} carouselInView={carouselInView} />
+      <InfiniteMovingCards speed='slow' direction='right' />
       <MostViewedPropertiesSection featuresRef={featuresRef} featuresInView={featuresInView} />
       <TestimonialsSection testimonialsRef={testimonialsRef} testimonialsInView={testimonialsInView} />
       <Footer />

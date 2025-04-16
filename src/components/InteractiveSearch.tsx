@@ -119,7 +119,7 @@ export default function InteractiveSearch() {
   };
 
   return (
-    <div className="w-full max-w-xl mx-auto relative z-10">
+    <div className="w-full max-w-3xl mx-auto relative z-10">
       {/* Standard Search Bar */}
       <SearchBar 
         searchQuery={searchQuery}

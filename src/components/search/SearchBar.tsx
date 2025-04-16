@@ -48,8 +48,7 @@ export default function SearchBar({
           </>
         ) : (
           <>
-            <Search className="h-4 w-4 mr-2" />
-            Search
+            Search with AI
           </>
         )}
       </Button>
