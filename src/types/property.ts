@@ -15,4 +15,7 @@ export interface Property {
   listedDate?: string;
   latitude?: number;
   longitude?: number;
+  sqft?: number;
+  yearBuilt?: number;
+  continent?: string;
 }

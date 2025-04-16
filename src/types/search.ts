@@ -5,6 +5,13 @@ import { Property } from '@/types/property';
 export interface SearchResult {
   exactMatches: Property[];
   recommendedMatches: Property[];
+  // Additional properties that might be used in SearchResults component
+  id?: string;
+  title?: string;
+  location?: string;
+  price?: string;
+  image?: string;
+  match?: number;
 }
 
 export interface PropertyType {
