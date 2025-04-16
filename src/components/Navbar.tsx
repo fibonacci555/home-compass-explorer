@@ -21,14 +21,14 @@ import {
 import { useTheme } from '@/components/ThemeContext';
 
 export default function Navbar() {
-  const { theme, setTheme } = useTheme();
+  const { theme } = useTheme();
   
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-2">
           <Link to="/" className="flex items-center gap-2">
-            <span className="font-bold text-2xl text-blue-600 dark:text-blue-400">Estate</span>
+            <span className="font-bold text-2xl text-blue-600">Estate</span>
           </Link>
           
           <NavigationMenu className="hidden md:flex ml-6">
@@ -59,15 +59,6 @@ export default function Navbar() {
         </div>
         
         <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            aria-label="Toggle theme"
-          >
-            {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-          </Button>
-          
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="rounded-full">
