@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { Home, Building, Heart } from 'lucide-react';
 import { SearchResult, PropertyType } from '@/types/search';
@@ -15,6 +16,7 @@ import LoadingAnimation from './search/LoadingAnimation';
 import SearchResults from './search/SearchResults';
 
 export default function InteractiveSearch() {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [currentStep, setCurrentStep] = useState(0);
   const [searchComplete, setSearchComplete] = useState(false);
@@ -24,6 +26,7 @@ export default function InteractiveSearch() {
   const [bedrooms, setBedrooms] = useState<number>(3);
   const [selectedResult, setSelectedResult] = useState<SearchResult | null>(null);
   const [showResults, setShowResults] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
   
   // Ensure locations is defined and an array
   const locationsList = Array.isArray(locations) ? locations : [];
@@ -105,11 +108,13 @@ export default function InteractiveSearch() {
 
   const handleSearchClick = () => {
     if (searchQuery) {
-      setSearchComplete(true);
+      setIsSearching(true);
+      
+      // Navigate to search results page
       setTimeout(() => {
-        setSelectedResult(mockResults[0]);
-        setShowResults(true);
-      }, 1500);
+        navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+        setIsSearching(false);
+      }, 500);
     } else {
       resetSearch();
     }
@@ -123,11 +128,12 @@ export default function InteractiveSearch() {
         setSearchQuery={setSearchQuery}
         handleSearchClick={handleSearchClick}
         resetSearch={resetSearch}
+        isSearching={isSearching}
       />
 
       {/* Interactive Question Flow */}
       <AnimatePresence>
-        {!searchComplete && currentStep >= 0 && (
+        {!searchComplete && currentStep >= 0 && !isSearching && (
           <QuestionCard
             currentStep={currentStep}
             totalSteps={questions.length}

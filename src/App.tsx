@@ -8,6 +8,7 @@ import { ThemeProvider, useTheme } from "./components/ThemeContext";
 import Index from "./pages/Index";
 import PropertiesPage from "./pages/PropertiesPage";
 import PropertyDetailsPage from "./pages/PropertyDetailsPage";
+import SearchResultsPage from "./pages/SearchResultsPage";
 import MapPage from "./pages/MapPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -44,6 +45,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/properties" element={<PropertiesPage />} />
               <Route path="/properties/:id" element={<PropertyDetailsPage />} />
+              <Route path="/search" element={<SearchResultsPage />} />
               <Route path="/map" element={<MapPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />

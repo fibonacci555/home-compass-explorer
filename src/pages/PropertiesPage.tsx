@@ -22,6 +22,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { motion } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import { toast } from 'sonner';
+import { Link } from 'react-router-dom';
 
 const PropertiesPage = () => {
   const [priceRange, setPriceRange] = useState([500000, 5000000]);
@@ -349,8 +350,10 @@ const PropertiesPage = () => {
                   
                   <div className="flex justify-between items-center">
                     <p className="text-xl font-bold text-blue-600 dark:text-blue-400">{property.price}</p>
-                    <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-                      View Details
+                    <Button asChild>
+                      <Link to={`/properties/${property.id}`}>
+                        View Details
+                      </Link>
                     </Button>
                   </div>
                 </div>
