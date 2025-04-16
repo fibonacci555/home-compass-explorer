@@ -4,7 +4,7 @@ import { useInView } from 'framer-motion';
 import Navbar from '../components/Navbar';
 import HeroSection from '../components/home/HeroSection';
 import PropertiesCarouselSection from '../components/home/PropertiesCarouselSection';
-import FeaturesSection from '../components/home/FeaturesSection';
+import MostViewedPropertiesSection from '../components/home/FeaturesSection';
 import TestimonialsSection from '../components/home/TestimonialsSection';
 import Footer from '../components/home/Footer';
 
@@ -26,7 +26,7 @@ export default function Index() {
       <Navbar />
       <HeroSection heroRef={heroRef} heroInView={heroInView} />
       <PropertiesCarouselSection carouselRef={carouselRef} carouselInView={carouselInView} />
-      <FeaturesSection featuresRef={featuresRef} featuresInView={featuresInView} />
+      <MostViewedPropertiesSection featuresRef={featuresRef} featuresInView={featuresInView} />
       <TestimonialsSection testimonialsRef={testimonialsRef} testimonialsInView={testimonialsInView} />
       <Footer />
     </div>
