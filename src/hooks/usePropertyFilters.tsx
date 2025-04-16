@@ -1,12 +1,20 @@
+
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
+
+interface FeatureToggles {
+  pool: boolean;
+  garage: boolean;
+  garden: boolean;
+  balcony: boolean;
+}
 
 export const usePropertyFilters = (properties: any[]) => {
   const [priceRange, setPriceRange] = useState<[number, number]>([500000, 5000000]);
   const [minBedrooms, setMinBedrooms] = useState<string | undefined>(undefined);
   const [minBathrooms, setMinBathrooms] = useState<string | undefined>(undefined);
   const [sortBy, setSortBy] = useState("recommended");
-  const [features, setFeatures] = useState({
+  const [features, setFeatures] = useState<FeatureToggles>({
     pool: false,
     garage: false,
     garden: false,

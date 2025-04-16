@@ -9,17 +9,11 @@ import { Link } from 'react-router-dom';
 import { Property } from '@/types/property';
 
 // Fix Leaflet default icon paths
-// Handle the _getIconUrl issue
-const DefaultIcon = L.Icon.Default;
-const iconRetinaUrl = 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png';
-const iconUrl = 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png';
-const shadowUrl = 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png';
-
-// Set the icon options
+delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl,
-  iconUrl,
-  shadowUrl,
+  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 });
 
 interface MapViewProps {
@@ -125,6 +119,8 @@ const MapView = ({ properties }: MapViewProps) => {
         zoom={12}
         scrollWheelZoom={true}
         className="h-full w-full z-0"
+        role="region"
+        aria-label="Interactive map of properties"
       >
         <TileLayer
           attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

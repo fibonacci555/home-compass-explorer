@@ -2,7 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Property } from "@/data/properties";
+import { Property } from "@/types/property";
 
 interface PropertyCardProps {
   prop: Property;
