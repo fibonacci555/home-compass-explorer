@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import { Property } from '@/types/property';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Drawer, DrawerContent, DrawerTrigger, DrawerClose } from "@/components/ui/drawer";
+import { Button } from "@/components/ui/button"; // Added the missing Button import
 
 // Fix Leaflet default icon paths
 import icon from 'leaflet/dist/images/marker-icon.png';
@@ -32,9 +33,12 @@ const MapResizer = () => {
   const map = useMap();
   
   useEffect(() => {
-    setTimeout(() => {
+    // Add a slight delay to ensure the map container is fully rendered
+    const timer = setTimeout(() => {
       map.invalidateSize();
-    }, 100);
+    }, 300);
+    
+    return () => clearTimeout(timer);
   }, [map]);
   
   return null;
@@ -107,7 +111,7 @@ const MapView = ({ properties }: MapViewProps) => {
             {selectedProperty.description?.slice(0, 100)}...
           </p>
           <Link
-            to={`/properties/${property.id}`}
+            to={`/properties/${selectedProperty.id}`}
             className="inline-block px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700"
           >
             View Full Details
