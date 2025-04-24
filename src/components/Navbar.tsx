@@ -25,7 +25,7 @@ const Navbar = () => {
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <Link to="/" className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                RealEstate
+                Immowise
               </Link>
             </div>
             <div className="hidden md:block">
